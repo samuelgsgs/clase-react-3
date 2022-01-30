@@ -1,34 +1,36 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
-import { ListaTabla } from '../data/MenuTabla';
+import {
+  Button,
+  Col,
+  Container,
+  FormControl,
+  InputGroup,
+  Row,
+} from 'react-bootstrap';
 
-export function Perfil() {
-  return (
-    <div className="main-site">
-      <h1>Página de perfil</h1>
+class Perfil extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Nombre Usuario</th>
-          </tr>
-        </thead>
-        <tbody>
-          {ListaTabla.map((item) => {
-            return (
-              <tr>
-                <td>{item.numero}</td>
-                <td>{item.nombre}</td>
-                <td>{item.apellido}</td>
-                <td>{item.usuario}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-    </div>
-  );
+  render() {
+    return (
+      <Container>
+        <Row>
+          <Col>
+            <InputGroup>
+              <InputGroup.Text>Mi Correo:</InputGroup.Text>
+              <FormControl placeholder={localStorage.getItem('email')} />
+            </InputGroup>
+            <Button onClick={this.salir}>Salir</Button>
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
+
+  salir() {
+    localStorage.clear();
+  }
 }
+export default Perfil;

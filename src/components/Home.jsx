@@ -1,20 +1,35 @@
 import React from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
+import { Login } from '../data/Login';
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { user: '', password: '' };
+    this.state = { user: '', password: '', email: '' };
     this.login = this.login.bind(this);
-    this.inputUser = React.createRef();
-    this.inputPassword = React.createRef();
   }
 
   login() {
-    this.setState({
-      user: this.inputUser.current.value,
-      password: this.inputPassword.current.value,
+    var correcto = false;
+    Login.map((item) => {
+      if (
+        item.email === this.emailValor.value &&
+        item.password === this.passwordValor.value
+      ) {
+        this.setState({
+          user: item.user,
+          password: item.password,
+          email: item.email,
+        });
+        localStorage.setItem('user', item.user);
+        localStorage.setItem('password', item.password);
+        localStorage.setItem('email', item.email);
+        correcto = true;
+      }
     });
+    if (!correcto) {
+      alert('Los datos introducidos no coninciden');
+    }
   }
 
   componentDidMount() {
@@ -31,7 +46,7 @@ class Home extends React.Component {
     ) {
       return (
         <div className="main-site">
-          <h1>Bienvenido {this.state.user}!</h1>
+          <h1>Bienvenido {localStorage.getItem('user')}!</h1>
         </div>
       );
     } else {
@@ -45,7 +60,7 @@ class Home extends React.Component {
                 <Form.Control
                   type="email"
                   placeholder="Introduce tu correo"
-                  ref={this.inputUser}
+                  ref={(email) => (this.emailValor = email)}
                 />
                 <Form.Text className="text-muted">
                   No compartas tu correo con nadie
@@ -57,7 +72,7 @@ class Home extends React.Component {
                 <Form.Control
                   type="password"
                   placeholder="Introduce tu contraseña"
-                  ref={this.inputPassword}
+                  ref={(password) => (this.passwordValor = password)}
                 />
                 <Form.Text className="text-muted">
                   No compartas tu contraseña con nadie
@@ -74,10 +89,6 @@ class Home extends React.Component {
         </div>
       );
     }
-  }
-  componentWillUnmount() {
-    localStorage.setItem('user', this.inputUser.current.value);
-    localStorage.setItem('password', this.inputPassword.current.value);
   }
 }
 
